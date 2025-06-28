@@ -3,3 +3,4 @@ gunicorn
 firebase-admin
 bcrypt
 requests
+python-dotenv
