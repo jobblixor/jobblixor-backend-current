@@ -1,0 +1,14 @@
+__pycache__/
+chrome_profile/
+chrome-data/
+cookies/
+debug/
+screenshots/
+uploads/
+user_data/
+config.env
+firebase_credentials
+results
+*.log
+*.db
+*.json
