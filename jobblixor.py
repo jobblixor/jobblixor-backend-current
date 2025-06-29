@@ -23,10 +23,14 @@ os.makedirs(SCREENSHOT_DIR, exist_ok=True)
 config = dotenv_values("config.env")
 DEFAULT_EMAIL = config.get("DEFAULT_EMAIL", "me@jobblixor.local")
 
-# Firebase setup
-cred = credentials.Certificate("firebase_credentials.json")
+# Firebase setup (securely from environment variable)
+firebase_credentials = os.environ.get("FIREBASE_CREDENTIALS")
+if not firebase_credentials:
+    raise Exception("Missing FIREBASE_CREDENTIALS environment variable.")
+cred = credentials.Certificate(json.loads(firebase_credentials))
 firebase_admin.initialize_app(cred)
 db = firestore.client()
+
 app = Flask(__name__)
 CORS(app)
 
@@ -226,6 +230,9 @@ def main():
         print(f"➡️ Visiting: {job['link']}")
         status = apply_to_job(job, user_data)
         print(f"❌ Error applying to {job['title']} at {job['company']} – {status}" if "Failed" in status else f"✅ Applied to {job['title']} at {job['company']} – {status}")
+
+app = Flask(__name__)
+CORS(app)
 
 @app.route('/submit', methods=['POST'])
 def submit():
