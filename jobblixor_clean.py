@@ -145,7 +145,9 @@ def save_user_data(user_input):
     print("✅ User data saved to user_data.json")
 
 def fetch_jobs(job_title, location, limit=10):
-    serp_api_key = config["SERP_API_KEY"]
+    serp_api_key = os.environ.get("SERP_API_KEY")
+    if not serp_api_key:
+        raise Exception("SERP_API_KEY is missing inside fetch_jobs!")
     query = f"{job_title} in {location}"
     url = "https://serpapi.com/search"
     params = {
@@ -171,6 +173,7 @@ def fetch_jobs(job_title, location, limit=10):
     except Exception as e:
         print(f"❌ Failed to fetch jobs: {e}")
         return []
+
 
 def apply_to_job(job, user_data):
     try:
